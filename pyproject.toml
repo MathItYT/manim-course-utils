@@ -2,6 +2,8 @@
 name = "manim-course-utils"
 version = "0.2.0"
 description = "Para el curso de ManimCE de MathLike"
+homepage = "https://github.com/MathLike/manim-course-utils"
+repository = "https://github.com/MathLike/manim-course-utils"
 authors = ["MathLike <benjamin.ubilla@uc.cl>"]
 readme = "README.md"
 packages = [{include = "manim_course_utils"}]
