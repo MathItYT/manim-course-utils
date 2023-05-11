@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "manim-course-utils"
+version = "0.1.0"
+description = ""
+authors = ["MathLike <benjamin.ubilla@uc.cl>"]
+readme = "README.md"
+packages = [{include = "manim_course_utils"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.12"
+manim = "^0.17.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
