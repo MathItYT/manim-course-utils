@@ -1,4 +1,5 @@
 from manim import *
+from manim_course_utils.markdown_tex_template import MarkdownTexTemplate
 
 
 __all__ = ["MobjectDescription"]
@@ -17,8 +18,8 @@ class MobjectDescription(Group):
         self.mobject = mobject
         self.description = mobject.__doc__ if description is None else description
         self.title = title or mobject.__class__.__name__
-        self.title_mobject = Text(title, font_size=36, weight=BOLD)
-        self.description_mobject = Text(self.description, font_size=24)
+        self.title_mobject = Tex(title, font_size=36, weight=BOLD)
+        self.description_mobject = Tex(self.description, font_size=24, tex_environment="markdown", tex_template=MarkdownTexTemplate())
         self.add(self.title_mobject, self.mobject, self.description_mobject)
         self.arrange(DOWN, buff=0.5)
         rec_config = rec_config or {
@@ -33,12 +34,12 @@ class MobjectDescription(Group):
     
     def set_description(self, description: str):
         self.description = description
-        self[2].become(Text(self.description, font_size=24))
+        self[2].become(Tex(self.description, font_size=24, tex_environment="markdown", tex_template=MarkdownTexTemplate()))
         return self
     
     def set_title(self, title: str):
         self.title = title
-        self[0].become(Text(title, font_size=36, weight=BOLD))
+        self[0].become(Tex(title, font_size=36, weight=BOLD))
         return self
     
     def set_mobject(self, mobject: Mobject, description: str | None = None, title: str | None = None):
