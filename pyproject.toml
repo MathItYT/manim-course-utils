@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "manim-course-utils"
-version = "0.7.0"
+version = "0.8.0"
 description = "Para el curso de ManimCE de MathLike"
 homepage = "https://github.com/MathLike/manim-course-utils"
 repository = "https://github.com/MathLike/manim-course-utils"

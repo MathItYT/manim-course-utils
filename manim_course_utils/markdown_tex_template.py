@@ -6,5 +6,5 @@ __all__ = ["MarkdownTexTemplate"]
 
 class MarkdownTexTemplate(TexTemplate):
     def __init__(self):
-        super().__init__()
+        super().__init__(tex_compiler="lualatex")
         self.add_to_preamble(r"\usepackage[fencedCode,hashEnumerators,hybrid,smartEllipses]{markdown}")

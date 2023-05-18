@@ -17,8 +17,11 @@ class AnimationDescription(Group):
         super().__init__()
         self.mobject_to_animate = mobject_to_animate
         self.animation = animation
-        self.title = title or animation.__class__.__name__
+        self.title = animation.__class__.__name__ or title
         self.description = description or animation.__doc__
+        examples_idx = self.description.find("Examples")
+        if examples_idx != -1:
+            self.description = self.description[:examples_idx]
         self.rec_config = rec_config or {
             "stroke_color": WHITE,
             "stroke_width": 2,
@@ -52,7 +55,7 @@ class AnimationDescription(Group):
     ):
         self[1].become(mobject_to_animate)
         self.set_description(description or animation.__doc__)
-        self.set_title(title or animation.__class__.__name__)
+        self.set_title(animation.__class__.__name__ or title)
         self.animation = animation
         return self
     
