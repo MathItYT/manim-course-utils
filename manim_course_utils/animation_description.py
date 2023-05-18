@@ -27,20 +27,20 @@ class AnimationDescription(Group):
             "buff": 0.2,
             "corner_radius": 0.2
         }
-        self.title_mobject = Text(self.title, font_size=36, weight=BOLD)
-        self.description_mobject = Text(self.description, font_size=24, tex_environment="markdown", tex_template=MarkdownTexTemplate())
+        self.title_mobject = Tex(f"\\textbf{{{self.title}}}", font_size=36)
+        self.description_mobject = Tex(self.description, font_size=24, tex_environment="markdown", tex_template=MarkdownTexTemplate())
         self.add(self.title_mobject, self.mobject_to_animate, self.description_mobject)
         self.arrange(DOWN, buff=0.5)
         self.add(SurroundingRectangle(self, **self.rec_config))
     
     def set_description(self, description: str):
         self.description = description
-        self[2].become(Text(self.description, font_size=24, tex_environment="markdown", tex_template=MarkdownTexTemplate()))
+        self[2].become(Tex(self.description, font_size=24, tex_environment="markdown", tex_template=MarkdownTexTemplate()))
         return self
     
     def set_title(self, title: str):
         self.title = title
-        self[0].become(Text(title, font_size=36, weight=BOLD))
+        self[0].become(Tex(f"\\textbf{{{title}}}", font_size=36))
         return self
     
     def set_mobject_and_animation(
