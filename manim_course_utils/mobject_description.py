@@ -18,7 +18,7 @@ class MobjectDescription(Group):
         self.mobject = mobject
         self.description = mobject.__doc__ if description is None else description
         self.title = title or mobject.__class__.__name__
-        self.title_mobject = Tex(title, font_size=36, weight=BOLD)
+        self.title_mobject = Tex(f"\\textbf{{{title}}}", font_size=36)
         self.description_mobject = Tex(self.description, font_size=24, tex_environment="markdown", tex_template=MarkdownTexTemplate())
         self.add(self.title_mobject, self.mobject, self.description_mobject)
         self.arrange(DOWN, buff=0.5)
@@ -39,7 +39,7 @@ class MobjectDescription(Group):
     
     def set_title(self, title: str):
         self.title = title
-        self[0].become(Tex(title, font_size=36, weight=BOLD))
+        self[0].become(Tex(f"\\textbf{{{title}}}", font_size=36))
         return self
     
     def set_mobject(self, mobject: Mobject, description: str | None = None, title: str | None = None):
