@@ -20,7 +20,7 @@ class MobjectDescription(Group):
         examples_idx = self.description.find("Examples")
         if examples_idx != -1:
             self.description = self.description[:examples_idx]
-        self.title = mobject.__class__.__name__ or title
+        self.title = mobject.__class__.__name__ if title is None else title
         self.title_mobject = Tex(f"\\textbf{{{title}}}", font_size=36)
         self.description_mobject = RstMobject(self.description, font_size=24)
         self.add(self.title_mobject, self.mobject, self.description_mobject)
@@ -51,5 +51,5 @@ class MobjectDescription(Group):
     def set_mobject(self, mobject: Mobject, description: str | None = None, title: str | None = None):
         self[1].become(mobject)
         self.set_description(mobject.__doc__ if description is None else description)
-        self.set_title(mobject.__class__.__name__ or title)
+        self.set_title(mobject.__class__.__name__ if title is None else title)
         return self

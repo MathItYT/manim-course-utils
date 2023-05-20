@@ -14,7 +14,8 @@ def create_rst_file(rst: str):
     return file_name
 
 def convert_rst_file_to_latex(file_name: str):
-    Popen(f"rst2latex.py {file_name} {file_name.replace('.rst', '.tex')}").wait()
+    p = Popen(f"docutils --writer=latex2e {file_name} {file_name.replace('.rst', '.tex')}")
+    p.wait()
     return file_name.replace(".rst", ".tex")
 
 def convert_latex_to_tex_str(file_name: str):

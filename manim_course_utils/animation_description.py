@@ -17,8 +17,8 @@ class AnimationDescription(Group):
         super().__init__()
         self.mobject_to_animate = mobject_to_animate
         self.animation = animation
-        self.title = animation.__class__.__name__ or title
-        self.description = description or animation.__doc__
+        self.title = animation.__class__.__name__ if title is None else title
+        self.description = animation.__doc__ if description is None else description
         examples_idx = self.description.find("Examples")
         if examples_idx != -1:
             self.description = self.description[:examples_idx]
@@ -57,8 +57,8 @@ class AnimationDescription(Group):
         title: str | None = None
     ):
         self[1].become(mobject_to_animate)
-        self.set_description(description or animation.__doc__)
-        self.set_title(animation.__class__.__name__ or title)
+        self.set_description(animation.__doc__ if description is None else description)
+        self.set_title(animation.__class__.__name__ if title is None else title)
         self.animation = animation
         return self
     
