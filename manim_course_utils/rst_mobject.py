@@ -1,46 +1,60 @@
 from manim import *
-from manim.utils.tex_file_writing import *
-from uuid import uuid4
 from subprocess import Popen
+import os
+import shutil
 
 
 __all__ = ["RstMobject"]
 
 
-def create_rst_file(rst: str):
-    file_name = f"{uuid4()}.rst"
-    with open(file_name, "w") as f:
-        f.write(rst)
-    return file_name
-
-def convert_rst_file_to_latex(file_name: str):
-    p = Popen(f"docutils --writer=latex2e {file_name} {file_name.replace('.rst', '.tex')}")
-    p.wait()
-    return file_name.replace(".rst", ".tex")
-
-def convert_latex_to_tex_str(file_name: str):
-    with open(file_name, "r") as f:
-        return f.read()
-
-def rst_to_tex_str(rst: str):
-    latex_file = convert_rst_file_to_latex(create_rst_file(rst))
-    return convert_latex_to_tex_str(latex_file), latex_file
-
-def remove_everything(prefix):
-    for file_name in Path(".").glob(f"{prefix}*"):
-        file_name.unlink()
-
-
 class EmptyTexTemplate(TexTemplate):
     def __init__(self):
         super().__init__()
-
+    
     def _rebuild(self):
-        return TexTemplate.default_placeholder_text
+        self.body = self.placeholder_text
 
 
-class RstMobject(MathTex):
-    def __init__(self, rst: str, **kwargs):
-        tex_str, latex_file = rst_to_tex_str(rst)
-        super().__init__(tex_str, tex_template=EmptyTexTemplate(), **kwargs)
-        remove_everything(latex_file.replace(".tex", ""))
+def create_pandoc_folder():
+    if not os.path.exists("pandoc"):
+        os.mkdir("pandoc")
+
+
+def write_rst_file(rst_content: str):
+    file_name = os.path.join("pandoc", "temp.rst")
+    with open(file_name, "w", encoding="utf-8") as f:
+        f.write(rst_content)
+    return file_name
+
+
+def rst_to_tex(rst_content: str):
+    create_pandoc_folder()
+    file_name = write_rst_file(rst_content)
+    tex_file_name = file_name.replace(".rst", ".tex")
+    p = Popen(["pandoc", file_name, "-t", "latex", "--standalone", "-o", tex_file_name, file_name])
+    p.wait()
+    with open(tex_file_name, "r", encoding="utf-8") as f:
+        tex_content = f.read()
+    tex_content = tex_content.replace("\documentclass[\n]{article}", "\documentclass[preview]{standalone}")
+    return tex_content
+
+
+def clean_up():
+    shutil.rmtree("pandoc")
+
+class RstMobject(Tex):
+    def __init__(
+        self,
+        rst_string: str,
+        arg_separator="",
+        tex_environment=None,
+        tex_template=EmptyTexTemplate(),
+        **kwargs
+    ):
+        super().__init__(
+            rst_to_tex(rst_string),
+            arg_separator=arg_separator,
+            tex_environment=tex_environment,
+            tex_template=tex_template,
+            **kwargs
+        )

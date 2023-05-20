@@ -1,0 +1,6 @@
+__pycache__
+media
+.pytest_cache
+_build
+_source
+pandoc

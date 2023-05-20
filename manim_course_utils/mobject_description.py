@@ -12,6 +12,8 @@ class MobjectDescription(Group):
         title: str | None = None,
         description: str | None = None,
         rec_config: dict | None = None,
+        height: float | None = None,
+        buff: float = None,
         **kwargs
     ):
         super().__init__(**kwargs)
@@ -20,36 +22,25 @@ class MobjectDescription(Group):
         examples_idx = self.description.find("Examples")
         if examples_idx != -1:
             self.description = self.description[:examples_idx]
+        self.description = self.description.split("\n")
+        for i in range(1, len(self.description)):
+            self.description[i] = self.description[i].removeprefix(4 * " ")
+        self.description = "\n".join(self.description)
+        self.description.replace("~.", "")
         self.title = mobject.__class__.__name__ if title is None else title
-        self.title_mobject = Tex(f"\\textbf{{{title}}}", font_size=36)
-        self.description_mobject = RstMobject(self.description, font_size=24)
+        self.title_mobject = Tex(f"\\textbf{{{self.title}}}")
+        self.description_mobject = RstMobject(self.description).scale_to_fit_height(5)
         self.add(self.title_mobject, self.mobject, self.description_mobject)
-        self.arrange(DOWN, buff=0.5)
-        rec_config = rec_config or {
+        buff = 0.5 if buff is None else buff
+        self.arrange(DOWN, buff=buff)
+        rec_config = {
             "stroke_color": WHITE,
             "stroke_width": 2,
             "fill_color": BLACK,
             "fill_opacity": 0.5,
             "buff": 0.2,
             "corner_radius": 0.2
-        }
-        self.add(SurroundingRectangle(self, **rec_config))
-    
-    def set_description(self, description: str):
-        self.description = description
-        examples_idx = self.description.find("Examples")
-        if examples_idx != -1:
-            self.description = self.description[:examples_idx]
-        self[2].become(RstMobject(self.description, font_size=24))
-        return self
-    
-    def set_title(self, title: str):
-        self.title = title
-        self[0].become(Tex(f"\\textbf{{{title}}}", font_size=36))
-        return self
-    
-    def set_mobject(self, mobject: Mobject, description: str | None = None, title: str | None = None):
-        self[1].become(mobject)
-        self.set_description(mobject.__doc__ if description is None else description)
-        self.set_title(mobject.__class__.__name__ if title is None else title)
-        return self
+        } if rec_config is None else rec_config
+        self.add_to_back(SurroundingRectangle(self, **rec_config))
+        height = 7 if height is None else height
+        self.scale_to_fit_height(height)

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "manim-course-utils"
-version = "0.12.0"
+version = "1.0.0"
 description = "Para el curso de ManimCE de MathLike"
 homepage = "https://github.com/MathLike/manim-course-utils"
 repository = "https://github.com/MathLike/manim-course-utils"
@@ -11,7 +11,9 @@ packages = [{include = "manim_course_utils"}]
 [tool.poetry.dependencies]
 python = ">=3.8,<3.12"
 manim = "^0.17.3"
-docutils = "^0.20.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.3.1"
 
 [build-system]
 requires = ["poetry-core"]
