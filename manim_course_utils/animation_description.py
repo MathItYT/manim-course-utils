@@ -1,5 +1,5 @@
 from manim import *
-from manim_course_utils.markdown_tex_template import MarkdownTexTemplate
+from .rst_mobject import RstMobject
 
 
 __all__ = ["AnimationDescription"]
@@ -31,14 +31,17 @@ class AnimationDescription(Group):
             "corner_radius": 0.2
         }
         self.title_mobject = Tex(f"\\textbf{{{self.title}}}", font_size=36)
-        self.description_mobject = Tex(self.description, font_size=24, tex_environment="markdown", tex_template=MarkdownTexTemplate())
+        self.description_mobject = RstMobject(self.description, font_size=24)
         self.add(self.title_mobject, self.mobject_to_animate, self.description_mobject)
         self.arrange(DOWN, buff=0.5)
         self.add(SurroundingRectangle(self, **self.rec_config))
     
     def set_description(self, description: str):
         self.description = description
-        self[2].become(Tex(self.description, font_size=24, tex_environment="markdown", tex_template=MarkdownTexTemplate()))
+        examples_idx = self.description.find("Examples")
+        if examples_idx != -1:
+            self.description = self.description[:examples_idx]
+        self[2].become(RstMobject(self.description, font_size=24))
         return self
     
     def set_title(self, title: str):
