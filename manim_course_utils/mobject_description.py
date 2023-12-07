@@ -29,7 +29,8 @@ class MobjectDescription(Group):
         self.description.replace("~.", "")
         self.title = mobject.__class__.__name__ if title is None else title
         self.title_mobject = Tex(f"\\textbf{{{self.title}}}")
-        self.description_mobject = RstMobject(self.description).scale_to_fit_height(5)
+        self.description_mobject = RstMobject(
+            self.description).scale_to_fit_height(5)
         self.add(self.title_mobject, self.mobject, self.description_mobject)
         buff = 0.5 if buff is None else buff
         self.arrange(DOWN, buff=buff)

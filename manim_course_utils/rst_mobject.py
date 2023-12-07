@@ -10,7 +10,7 @@ __all__ = ["RstMobject"]
 class EmptyTexTemplate(TexTemplate):
     def __init__(self):
         super().__init__()
-    
+
     def _rebuild(self):
         self.body = self.placeholder_text
 
@@ -31,16 +31,19 @@ def rst_to_tex(rst_content: str):
     create_pandoc_folder()
     file_name = write_rst_file(rst_content)
     tex_file_name = file_name.replace(".rst", ".tex")
-    p = Popen(["pandoc", file_name, "-t", "latex", "--standalone", "-o", tex_file_name, file_name])
+    p = Popen(["pandoc", file_name, "-t", "latex",
+              "--standalone", "-o", tex_file_name, file_name])
     p.wait()
     with open(tex_file_name, "r", encoding="utf-8") as f:
         tex_content = f.read()
-    tex_content = tex_content.replace("\documentclass[\n]{article}", "\documentclass[preview]{standalone}")
+    tex_content = tex_content.replace(
+        "\documentclass[\n]{article}", "\documentclass[preview]{standalone}")
     return tex_content
 
 
 def clean_up():
     shutil.rmtree("pandoc")
+
 
 class RstMobject(Tex):
     def __init__(
